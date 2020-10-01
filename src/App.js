@@ -7,6 +7,7 @@ import { formatSeasons } from "./utils/formatSeasons";
 
 import Episodes from "./components/Episodes";
 import "./styles.css";
+import { fetchShow } from './api/fetchShow'; // Import as usual 
 
 export default function App() {
   const [show, setShow] = useState(null);
@@ -14,19 +15,32 @@ export default function App() {
   const [selectedSeason, setSelectedSeason] = useState("");
   const episodes = seasons[selectedSeason] || [];
 
-  useEffect(() => {
-    const fetchShow = () => {
-      axios
-        .get(
-          "https://api.tvmaze.com/singlesearch/shows?q=stranger-things&embed=episodes"
-        )
-        .then(res => {
-          setShow(res.data);
-          setSeasons(formatSeasons(res.data._embedded.episodes));
-        });
-    };
-    fetchShow();
-  }, []);
+  // useEffect(() => {
+  //   const fetchShow = () => {
+  //     axios
+  //       .get(
+  //         "https://api.tvmaze.com/singlesearch/shows?q=stranger-things&embed=episodes"
+  //       )
+  //       .then(res => {
+  //         setShow(res.data);
+  //         setSeasons(formatSeasons(res.data._embedded.episodes));
+  //       });
+  //   };
+  //   fetchShow();
+  // }, []);
+
+
+  useEffect(() => { // I didn't want to loose the info above so i commented out.. 
+  fetchShow()
+  .then(res => { // Set up my return from the axios call witihin fertchShow 
+    setShow(res);
+    setSeasons(formatSeasons(res._embedded.episodes));
+})
+}, []);
+
+
+
+
 
   const handleSelect = e => {
     setSelectedSeason(e.value);
